@@ -9,7 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+//import androidx.compose.ui.tooling.preview.Preview
 import com.example.rp2.ui.theme.RP2Theme
 import android.Manifest
 import android.content.Context
@@ -31,6 +31,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 import androidx.compose.material3.Button
 import coil.compose.rememberImagePainter
+import com.google.mlkit.vision.text.Text
+import com.google.android.gms.tasks.Task
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,28 +88,52 @@ fun MainScreen(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(onClick = {
-            val permissionCheckResult =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-            if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+            val permissionCheckResult = (
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                    )
+            if (permissionCheckResult) {
                 cameraLauncher.launch(uri)
             } else {
                 // Request a permission
                 permissionLauncher.launch(Manifest.permission.CAMERA)
+                permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
-        }) {
+        })
+        {
             Text(text = "Capture Image From Camera")
         }
+
     }
 
+    val textRec = TextRecognizer()
+    var text  by remember { mutableStateOf("") }
+
     if (capturedImageUri.path?.isNotEmpty() == true) {
+        val textTask : Task<Text> = textRec.getResultText(context, capturedImageUri)
+        textTask.addOnSuccessListener { visionText ->
+                text = visionText.text
+            }
+            .addOnFailureListener(){ e ->
+                e.printStackTrace()
+            }
+
+
         Image(
             modifier = Modifier
-                .padding(16.dp, 8.dp),
+                .padding(8.dp, 6.dp),
             painter = rememberImagePainter(capturedImageUri),
             contentDescription = null
         )
+        Text(
+            text = text
+        )
     }
+
 }
+
 
 fun Context.createImageFile(): File {
     // Create an image file name
@@ -119,11 +146,3 @@ fun Context.createImageFile(): File {
     )
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    RP2Theme {
-        MainScreen()
-    }
-}
