@@ -1,3 +1,5 @@
+package com.example.rp2
+
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 
 import androidx.compose.material3.TabRow
@@ -37,7 +38,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.rp2.MainActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 
@@ -51,8 +51,6 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.unit.times
 
-
-import com.example.rp2.R
 
 import com.example.rp2.ui.theme.RP2Theme
 import net.engawapg.lib.zoomable.rememberZoomState
@@ -76,7 +74,7 @@ class ResultsActivity : ComponentActivity() {
                                 .width(30.dp)
                                 .height(30.dp)
                                 .padding(start = 0.dp, top = 6.dp, end = 7.dp, bottom = 6.dp)
-                                .clickable { mContext.startActivity(Intent(mContext, MainActivity::class.java)) },
+                                .clickable { mContext.startActivity(Intent(mContext, CaptureImageActivity2::class.java)) },
                             painter = painterResource(id = R.drawable.east),
                             contentDescription = null,
                             contentScale = ContentScale.Crop
@@ -221,7 +219,7 @@ fun PreviewResultsActivity() {
                         .width(30.dp)
                         .height(30.dp)
                         .padding(start = 0.dp, top = 6.dp, end = 7.dp, bottom = 6.dp)
-                        .clickable { mContext.startActivity(Intent(mContext, MainActivity::class.java)) },
+                        .clickable { mContext.startActivity(Intent(mContext, CaptureImageActivity2::class.java)) },
                     painter = painterResource(id = R.drawable.east),
                     contentDescription = null,
                     contentScale = ContentScale.Crop

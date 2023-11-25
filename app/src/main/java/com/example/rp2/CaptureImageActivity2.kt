@@ -1,12 +1,11 @@
 package com.example.rp2
 
-//import androidx.compose.ui.tooling.preview.Preview
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -16,8 +15,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,14 +47,25 @@ class CaptureImageActivity2 : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             RP2Theme {
-                Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Column(
+                        modifier = Modifier.padding(
+                            start = 16.dp,
+                            end = 16.dp,
+                            bottom = 16.dp
+                        )
+                    ) {
 
-                    Text(
-                        text = "Análise de imagem",
-                        fontSize = 24.sp,
-                        modifier = Modifier.padding(top = 24.dp, bottom = 24.dp),
-                    )
-                    CaptureImageContainer()
+                        Text(
+                            text = "Análise de imagem",
+                            fontSize = 24.sp,
+                            modifier = Modifier.padding(top = 24.dp, bottom = 24.dp),
+                        )
+                        CaptureImageContainer()
+                    }
                 }
             }
         }
@@ -64,14 +77,15 @@ class CaptureImageActivity2 : ComponentActivity() {
 fun CaptureImageContainer() {
     val context = LocalContext.current
     val file = context.createImageFile2()
-    var uri:Uri = Uri.EMPTY
+    var uri: Uri = Uri.EMPTY
     try {
-        uri = FileProvider.getUriForFile(Objects.requireNonNull(context.applicationContext),
-            "com.example.rp2.fileprovider", file);
-    }catch (e:Exception){
+        uri = FileProvider.getUriForFile(
+            Objects.requireNonNull(context.applicationContext),
+            "com.example.rp2.fileprovider", file
+        );
+    } catch (e: Exception) {
 
     }
-
 
 
     var capturedImageUri by remember {
@@ -92,6 +106,31 @@ fun CaptureImageContainer() {
         } else {
             Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    val textRec = TextRecognizer()
+    var text by remember { mutableStateOf("") }
+
+    if (capturedImageUri.path?.isNotEmpty() == true) {
+        context.startActivity(Intent(context, ResultsActivity::class.java))
+        /*  val textTask: Task<Text> = textRec.getResultText(context, capturedImageUri)
+          textTask.addOnSuccessListener { visionText ->
+              text = visionText.text
+          }
+              .addOnFailureListener() { e ->
+                  e.printStackTrace()
+              }
+
+
+          Image(
+              modifier = Modifier
+                  .padding(8.dp, 6.dp),
+              painter = rememberImagePainter(capturedImageUri),
+              contentDescription = null
+          )
+          Text(
+              text = text
+          )*/
     }
 
     fun handleOnCaptureImageClick() {
@@ -121,10 +160,11 @@ fun CaptureImageContainer() {
     }
 
     Image(
-        
+
         modifier = Modifier
             .clip(shape = RoundedCornerShape(size = 12.dp))
-            .fillMaxHeight().clickable { handleOnCaptureImageClick() },
+            .fillMaxHeight()
+            .clickable { handleOnCaptureImageClick() },
         painter = painterResource(id = R.drawable.img_1),
         contentDescription = null,
         contentScale = ContentScale.Crop,
@@ -148,16 +188,28 @@ fun Context.createImageFile2(): File {
 @Composable
 fun PreviewCaptureImage2Activity() {
     RP2Theme {
-        Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            Column(
+                modifier = Modifier.padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = 16.dp
+                )
+            ) {
 
-            Text(
-                text = "Análise de imagem",
-                fontSize = 24.sp,
-                modifier = Modifier.padding(top = 24.dp, bottom = 24.dp),
-            )
-            CaptureImageContainer()
+                Text(
+                    text = "Análise de imagem",
+                    fontSize = 24.sp,
+                    modifier = Modifier.padding(top = 24.dp, bottom = 24.dp),
+                )
+                CaptureImageContainer()
+            }
         }
-    }}
+    }
+}
 
 
 

@@ -42,7 +42,6 @@ class HomeActivity : ComponentActivity() {
 
         setContent {
             RP2Theme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
