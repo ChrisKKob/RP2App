@@ -45,104 +45,104 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+//                    MainScreen()
                 }
             }
         }
     }
 }
 
-@Composable
-fun MainScreen(modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-    val file = context.createImageFile()
-    val uri = FileProvider.getUriForFile(
-        Objects.requireNonNull(context),
-        BuildConfig.APPLICATION_ID + ".provider", file
-    )
-
-    var capturedImageUri by remember {
-        mutableStateOf<Uri>(Uri.EMPTY)
-    }
-
-    val cameraLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
-            capturedImageUri = uri
-        }
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) {
-        if (it) {
-            Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
-            cameraLauncher.launch(uri)
-        } else {
-            Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Button(onClick = {
-            val permissionCheckResult = (
-                    ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
-                            ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                    )
-            if (permissionCheckResult) {
-                cameraLauncher.launch(uri)
-            } else {
-                // Request a permission
-                permissionLauncher.launch(Manifest.permission.CAMERA)
-                permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
-        })
-        {
-            Text(text = "Capture Image From Camera")
-        }
-
-    }
-
-    val textRec = TextRecognizer()
-    var text  by remember { mutableStateOf("") }
-
-    if (capturedImageUri.path?.isNotEmpty() == true) {
-        val textTask : Task<Text> = textRec.getResultText(context, capturedImageUri)
-        textTask.addOnSuccessListener { visionText ->
-                text = visionText.text
-            }
-            .addOnFailureListener(){ e ->
-                e.printStackTrace()
-            }
-
-
-        Image(
-            modifier = Modifier
-                .padding(8.dp, 6.dp),
-            painter = rememberImagePainter(capturedImageUri),
-            contentDescription = null
-        )
-        Text(
-            text = text
-        )
-    }
-
-}
-
-
-fun Context.createImageFile(): File {
-    // Create an image file name
-    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-    val imageFileName = "JPEG_" + timeStamp + "_"
-    return File.createTempFile(
-        imageFileName, /* prefix */
-        ".jpg", /* suffix */
-        externalCacheDir      /* directory */
-    )
-}
-
+//@Composable
+//fun MainScreen(modifier: Modifier = Modifier) {
+//    val context = LocalContext.current
+//    val file = context.createImageFile()
+//    val uri = FileProvider.getUriForFile(
+//        Objects.requireNonNull(context),
+//        BuildConfig.APPLICATION_ID + ".provider", file
+//    )
+//
+//    var capturedImageUri by remember {
+//        mutableStateOf<Uri>(Uri.EMPTY)
+//    }
+//
+//    val cameraLauncher =
+//        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
+//            capturedImageUri = uri
+//        }
+//
+//    val permissionLauncher = rememberLauncherForActivityResult(
+//        ActivityResultContracts.RequestPermission()
+//    ) {
+//        if (it) {
+//            Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+//            cameraLauncher.launch(uri)
+//        } else {
+//            Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+//        }
+//    }
+//
+//    Column(
+//        Modifier
+//            .fillMaxSize()
+//            .padding(10.dp),
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        Button(onClick = {
+//            val permissionCheckResult = (
+//                    ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
+//                            ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+//                            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+//                    )
+//            if (permissionCheckResult) {
+//                cameraLauncher.launch(uri)
+//            } else {
+//                // Request a permission
+//                permissionLauncher.launch(Manifest.permission.CAMERA)
+//                permissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+//            }
+//        })
+//        {
+//            Text(text = "Capture Image From Camera")
+//        }
+//
+//    }
+//
+//    val textRec = TextRecognizer()
+//    var text  by remember { mutableStateOf("") }
+//
+//    if (capturedImageUri.path?.isNotEmpty() == true) {
+//        val textTask : Task<Text> = textRec.getResultText(context, capturedImageUri)
+//        textTask.addOnSuccessListener { visionText ->
+//                text = visionText.text
+//            }
+//            .addOnFailureListener(){ e ->
+//                e.printStackTrace()
+//            }
+//
+//
+//        Image(
+//            modifier = Modifier
+//                .padding(8.dp, 6.dp),
+//            painter = rememberImagePainter(capturedImageUri),
+//            contentDescription = null
+//        )
+//        Text(
+//            text = text
+//        )
+//    }
+//
+//}
+//
+//
+//fun Context.createImageFile(): File {
+//    // Create an image file name
+//    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+//    val imageFileName = "JPEG_" + timeStamp + "_"
+//    return File.createTempFile(
+//        imageFileName, /* prefix */
+//        ".jpg", /* suffix */
+//        externalCacheDir      /* directory */
+//    )
+//}
+//

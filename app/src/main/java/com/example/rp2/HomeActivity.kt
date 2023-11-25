@@ -96,7 +96,7 @@ fun CardImage() {
                 fontWeight = FontWeight.Normal,
             )
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End){
-                Button(onClick={            mContext.startActivity(Intent(mContext, MainActivity::class.java))
+                Button(onClick={            mContext.startActivity(Intent(mContext, CaptureImageActivity2::class.java))
                 }){
                     Text("Conferir")
                 }
@@ -108,7 +108,7 @@ fun CardImage() {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun PreviewHomeActivity() {
     RP2Theme {
         Column(modifier = Modifier.padding(start=16.dp,end=16.dp)){
 

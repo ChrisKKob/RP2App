@@ -207,7 +207,7 @@ fun TabText() {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun PreviewResultsActivity() {
     RP2Theme {
         Column(modifier = Modifier.padding(start=16.dp,end=16.dp, top=16.dp).fillMaxSize()){
             Row(
