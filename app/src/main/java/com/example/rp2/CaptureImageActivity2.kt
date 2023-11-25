@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -73,6 +74,17 @@ class CaptureImageActivity2 : ComponentActivity() {
 }
 
 
+fun Context.createImageFile2(): File {
+    // Create an image file name
+    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+    val imageFileName = "JPEG_" + timeStamp + "_"
+    return File.createTempFile(
+        imageFileName, /* prefix */
+        ".jpg", /* suffix */
+        externalCacheDir      /* directory */
+    )
+}
+
 @Composable
 fun CaptureImageContainer() {
     val context = LocalContext.current
@@ -84,10 +96,10 @@ fun CaptureImageContainer() {
             "com.example.rp2.fileprovider", file
         );
     } catch (e: Exception) {
-
+        e.message?.let { Log.d("e", it) }
     }
-
-
+//
+//
     var capturedImageUri by remember {
         mutableStateOf<Uri>(Uri.EMPTY)
     }
@@ -108,10 +120,11 @@ fun CaptureImageContainer() {
         }
     }
 
-    val textRec = TextRecognizer()
-    var text by remember { mutableStateOf("") }
+
 
     if (capturedImageUri.path?.isNotEmpty() == true) {
+        val textRec = TextRecognizer()
+        var text by remember { mutableStateOf("") }
         context.startActivity(Intent(context, ResultsActivity::class.java))
         /*  val textTask: Task<Text> = textRec.getResultText(context, capturedImageUri)
           textTask.addOnSuccessListener { visionText ->
@@ -160,7 +173,6 @@ fun CaptureImageContainer() {
     }
 
     Image(
-
         modifier = Modifier
             .clip(shape = RoundedCornerShape(size = 12.dp))
             .fillMaxHeight()
@@ -173,16 +185,7 @@ fun CaptureImageContainer() {
 }
 
 
-fun Context.createImageFile2(): File {
-    // Create an image file name
-    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-    val imageFileName = "JPEG_" + timeStamp + "_"
-    return File.createTempFile(
-        imageFileName, /* prefix */
-        ".jpg", /* suffix */
-        externalCacheDir      /* directory */
-    )
-}
+
 
 @Preview(showBackground = true)
 @Composable
