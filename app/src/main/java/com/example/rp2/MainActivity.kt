@@ -21,9 +21,9 @@ class MainActivity : ComponentActivity() {
             RP2Theme {
                 val navController = rememberNavController()
 
-                NavHost(navController = navController, startDestination = "Home" ){
+                NavHost(navController = navController, startDestination = "HomeScreen" ){
                     composable(
-                        route = "Home"
+                        route = "HomeScreen"
                     ){
                         HomeScreen(navController)
                     }
@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
 
                     composable(
                         route = "ResultScreen/{text}",
-                                arguments = listOf(navArgument("result") { type = NavType.StringType })
+                                arguments = listOf(navArgument("text") { type = NavType.StringType })
                     ){backStackEntry ->
                         val text = backStackEntry.arguments?.getString("text")
                         ResultScreen(navController, text ?: "")
