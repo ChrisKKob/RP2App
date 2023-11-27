@@ -22,7 +22,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabPosition
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,6 +37,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -77,7 +82,7 @@ fun ResultScreen(
             Text(
                 text = "Transcrição",
                 style = TextStyle(
-                    fontSize = 25.sp,
+                    fontSize = 30.sp,
                     fontFamily = FontFamily.Default,
                     fontWeight = FontWeight(700),
                     color = Color(0xFF1D1B20),
@@ -93,55 +98,151 @@ fun TabScreen(
     navController: NavController,
     text: String
 ) {
-    var tabIndex by remember { mutableIntStateOf(0) }
+    var tabIndex by remember { mutableIntStateOf(1) }
 
-    val tabs = listOf("Image", "Text")
+    val tabs = listOf("Imagem", "Texto")
 
-    Column(modifier = Modifier.fillMaxWidth()) {
-        TabRow(selectedTabIndex = tabIndex
-        ) {
-            tabs.forEachIndexed { index, title ->
-                Tab(text = { Text(title) },
-                    modifier = Modifier
-                        .background(Color.White)
-                        .clip(shape = RoundedCornerShape(size = 25.dp)),
-
-                    selected = tabIndex == index,
-                    onClick = { tabIndex = index }
-                )
-            }
+    val indicator = @Composable { tabPositions: List<TabPosition> ->
+        TabRowDefaults.Indicator(
+            modifier = Modifier.tabIndicatorOffset(tabPositions[tabIndex]),
+            color = Color(0xFF4834D4)
+        )
         }
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TabRow(
+                selectedTabIndex = tabIndex,
+                //contentColor = MaterialTheme.colorScheme.,
+                modifier = Modifier.padding(top = 15.dp),
+                indicator = indicator
+            ) {
+                tabs.forEachIndexed { index, title ->
+                    Tab(
+                        selected = tabIndex == index,
+                        onClick = { tabIndex = index },
+                        text = { Text(title,
+                            style = TextStyle(
+                                color = Color(0xFF4834D4),
+                                fontWeight = FontWeight(500),
+                                fontSize = 25.sp,
+                            ))
+
+                        },
+                    )
+                }
+            }
+
+
         when (tabIndex) {
-            1 -> TabImage()
-            0 -> TabText(navController, text)
+            0 -> TabImage()
+            1 -> TabText(navController, text)
         }
     }
 }
 
 @Composable
 fun TabImage() {
-    val painter = painterResource(id = R.drawable.img)
+    val painter = painterResource(id = R.drawable.lousa2)
     val zoomState = rememberZoomState(contentSize = painter.intrinsicSize)
 
-    Image(
 
-        painter = painterResource(id = R.drawable.img),
-        contentDescription = "Imagem",
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(size = 20.dp))
-            .zoomable(zoomState),
+    var contrast by remember { mutableStateOf(1f) }
+    val colorMatrix = floatArrayOf(
+        contrast, 0f, 0f, 0f, 0f,
+        0f, contrast, 0f, 0f, 0f,
+        0f, 0f, contrast, 0f, 0f,
+        0f, 0f, 0f, 1f, 0f
+    )
 
+
+    Column(   modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 10.dp)
+        .fillMaxSize()) {
+        Image(
+
+            painter = painterResource(id = R.drawable.lousa2),
+            contentDescription = "Imagem",
+            colorFilter = ColorFilter.colorMatrix(ColorMatrix(colorMatrix)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(shape = RoundedCornerShape(size = 15.dp))
+                .zoomable(zoomState),
         )
 
+        Text(
+            text = "Manipular contraste",
+            style = TextStyle(
+                fontSize = 25.sp,
+                fontFamily = FontFamily.Default,
+                fontWeight = FontWeight(400),
+
+                ),
+            modifier = Modifier.padding(10.dp)
+        )
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(
+                0.dp,
+                Alignment.CenterHorizontally
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(
+                onClick = { contrast += 0.1f },
+                colors = ButtonDefaults.filledTonalButtonColors( Color(0xFF4834D4)),
+                modifier = Modifier.padding(start = 10.dp, end = 7.dp)
+                    .width(80.dp)
+            ) {
+                Text("+",
+                    style = TextStyle(
+                        fontSize = 30.sp,
+                        lineHeight = 20.sp,
+                        fontFamily = FontFamily.Default,
+                        color = Color(0xFFFFFFFF))
+                )
+            }
+
+            Button(
+                onClick = { contrast -= 0.1f },
+                colors = ButtonDefaults.filledTonalButtonColors( Color(0xFF4834D4)),
+                modifier = Modifier.width(80.dp)
+            ) {
+                Text("—",
+                    style = TextStyle(
+                        fontSize = 30.sp,
+                        lineHeight = 30.sp,
+                        fontFamily = FontFamily.Default,
+                        fontWeight = FontWeight(300),
+                        color = Color(0xFFFFFFFF))
+                )
+            }
+        }
+        Box( modifier = Modifier
+            .height(300.dp)
+            .padding(top = 70.dp)
+            .clip(shape = RoundedCornerShape(size = 25.dp))
+            .background(Color(0xFF8E80EE))
+            .fillMaxWidth()) {
+            Text(
+                text = "Além de alterar o contraste, você pode manipular o zoom com movimentos de pinça como usualmente é feito em fotos nos smartphones atuais. Use as configurações de zoom e contraste que preferir!",
+                style = TextStyle(
+                    fontSize = 22.sp,
+                    fontFamily = FontFamily.Default,
+                    fontWeight = FontWeight(500)
+                ),modifier = Modifier.padding(10.dp, top = 10.dp, end = 10.dp)
+            )
+        }
+    }
 }
+
+
 
 @Composable
 fun TabText(
     navController: NavController,
     text: String
 ) {
-    // Conteúdo da aba "Texto"
     val scrollState = rememberScrollState()
 
     val sliderState = remember { mutableStateOf(0f) }
@@ -154,7 +255,7 @@ fun TabText(
         colors = SliderDefaults.colors(
             thumbColor = Color(0xFF4834D4),
             activeTrackColor = Color(0xFF4834D4),
-            inactiveTrackColor = MaterialTheme.colorScheme.secondaryContainer,
+            inactiveTrackColor =  Color(0xFFD4CDFE),
         ),
         onValueChange = { sliderState.value = it }
     )
@@ -162,8 +263,8 @@ fun TabText(
         modifier = Modifier
             .width(400.dp)
             .height(600.dp)
-            .background(Color(0xFF2B2B2B))
             .clip(shape = RoundedCornerShape(size = 25.dp))
+            .background(Color(0xFF2B2B2B))
             .verticalScroll(scrollState)
             .fillMaxWidth()
 
