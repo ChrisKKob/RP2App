@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">RP2</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_capture_image2">CaptureImageActivity2</string>
+</resources>
