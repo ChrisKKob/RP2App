@@ -1,6 +1,5 @@
 package com.example.rp2.view
 
-import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,10 +7,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -19,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Tab
@@ -50,9 +50,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
@@ -69,7 +66,8 @@ fun ResultScreen(
 ){
     Column(modifier = Modifier
         .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-        .fillMaxSize()){
+        .fillMaxSize()
+    ){
         Row(
             horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically,
@@ -114,7 +112,8 @@ fun TabScreen(
             modifier = Modifier.tabIndicatorOffset(tabPositions[tabIndex]),
             color = Color(0xFF4834D4)
         )
-        }
+    }
+
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -141,7 +140,6 @@ fun TabScreen(
                 }
             }
 
-
         when (tabIndex) {
             0 -> TabImage(appViewModel)
             1 -> TabText(navController, appViewModel)
@@ -167,22 +165,13 @@ fun TabImage(
 
     Column(   modifier = Modifier
         .padding(start = 10.dp, end = 10.dp, top = 10.dp)
-        .fillMaxSize()) {
-        Image(
-
-            painter = painter,
-            contentDescription = "Imagem",
-            colorFilter = ColorFilter.colorMatrix(ColorMatrix(colorMatrix)),
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(shape = RoundedCornerShape(size = 15.dp))
-                .zoomable(zoomState),
-        )
-
+        .fillMaxSize()
+        .verticalScroll(rememberScrollState())
+    ) {
         Text(
             text = "Manipular contraste",
             style = TextStyle(
-                fontSize = 25.sp,
+                fontSize = 15.sp,
                 fontFamily = FontFamily.Default,
                 fontWeight = FontWeight(400),
 
@@ -197,6 +186,7 @@ fun TabImage(
             ),
             verticalAlignment = Alignment.CenterVertically
         ) {
+
             Button(
                 onClick = { contrast += 0.1f },
                 colors = ButtonDefaults.filledTonalButtonColors( Color(0xFF4834D4)),
@@ -228,23 +218,37 @@ fun TabImage(
                 )
             }
         }
-        Box( modifier = Modifier
-            .height(300.dp)
-            .padding(top = 70.dp)
-            .clip(shape = RoundedCornerShape(size = 25.dp))
-            .background(Color(0xFF8E80EE))
-            .fillMaxWidth()) {
-            Text(
-                text = "Além de alterar o contraste, você pode manipular o zoom com movimentos de pinça como usualmente é feito em fotos nos smartphones atuais. Use as configurações de zoom e contraste que preferir!",
-                style = TextStyle(
-                    fontSize = 22.sp,
-                    fontFamily = FontFamily.Default,
-                    fontWeight = FontWeight(500)
-                ),modifier = Modifier.padding(10.dp, top = 10.dp, end = 10.dp)
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+            Image(
+                painter = painter,
+                contentDescription = "Imagem",
+                colorFilter = ColorFilter.colorMatrix(ColorMatrix(colorMatrix)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(0.dp, 700.dp)
+                    .clip(shape = RoundedCornerShape(size = 15.dp))
+                    .zoomable(zoomState),
             )
+
         }
+//        Box( modifier = Modifier
+//            .height(300.dp)
+//            .padding(top = 70.dp)
+//            .clip(shape = RoundedCornerShape(size = 25.dp))
+//            .background(Color(0xFF8E80EE))
+//            .fillMaxWidth()) {
+//            Text(
+//                text = "Além de alterar o contraste, você pode manipular o zoom com movimentos de pinça como usualmente é feito em fotos nos smartphones atuais. Use as configurações de zoom e contraste que preferir!",
+//                style = TextStyle(
+//                    fontSize = 22.sp,
+//                    fontFamily = FontFamily.Default,
+//                    fontWeight = FontWeight(500)
+//                ),modifier = Modifier.padding(10.dp, top = 10.dp, end = 10.dp)
+//            )
+//        }
     }
-}
 
 
 
@@ -256,50 +260,51 @@ fun TabText(
     val scrollState = rememberScrollState()
 
     val sliderState = remember { mutableStateOf(0f) }
-    //val text = text
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-    ) {
-        Slider(
-            value = sliderState.value,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            colors = SliderDefaults.colors(
-                thumbColor = Color(0xFF4834D4),
-                activeTrackColor = Color(0xFF4834D4),
-                inactiveTrackColor =  Color(0xFFD4CDFE),
-            ),
-            onValueChange = { sliderState.value = it }
         )
-        Box(
-            modifier = Modifier
-                .width(400.dp)
-                .height(600.dp)
-                .clip(shape = RoundedCornerShape(size = 25.dp))
-                .background(Color(0xFF2B2B2B))
-                .verticalScroll(scrollState)
-                .fillMaxWidth()
-
-        ) {
-            Text(
-                text = appViewModel.texto,
-                style = TextStyle(color = Color.White),
-                fontSize = (sliderState.value + 1)  * 36.sp,
+    {
+            Slider(
+                value = sliderState.value,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight()
-                    .padding(8.dp)
+                    .padding(8.dp),
+                colors = SliderDefaults.colors(
+                    thumbColor = Color(0xFF4834D4),
+                    activeTrackColor = Color(0xFF4834D4),
+                    inactiveTrackColor =  Color(0xFFD4CDFE),
+                ),
+                onValueChange = { sliderState.value = it }
             )
+            Box(
+                modifier = Modifier
+                    .width(400.dp)
+                    .height(600.dp)
+                    .clip(shape = RoundedCornerShape(size = 25.dp))
+                    .background(Color(0xFF2B2B2B))
+                    .verticalScroll(scrollState)
+                    .fillMaxWidth()
 
-        }
+            ) {
+                Text(
+                    text = appViewModel.texto,
+                    style = TextStyle(color = Color.White),
+                    fontSize = (sliderState.value + 1)  * 36.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .padding(8.dp)
+                )
+
+            }
 
         Button(onClick = {
-                navController.popBackStack()
-                navController.navigate("ImageCaptureScreen")
-            } ,
+            navController.popBackStack()
+            navController.navigate("ImageCaptureScreen")
+        } ,
             colors = ButtonDefaults.filledTonalButtonColors( Color(0xFF4834D4)),
             modifier = Modifier.padding(start = 160.dp, top = 10.dp)
         ) {
@@ -314,9 +319,10 @@ fun TabText(
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
         }
+
+        }
     }
 
-}
 
 @Preview(showBackground = true)
 @Composable

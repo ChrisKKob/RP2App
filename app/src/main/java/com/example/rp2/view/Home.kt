@@ -49,7 +49,7 @@ fun HomeScreen(
                 fontSize = 24.sp,
             )
             Text(
-                text = "",
+                text = "Nicolas",
                 fontSize = 24.sp,
                 color = Color(android.graphics.Color.parseColor("#007FFF")),
                 fontWeight = FontWeight.Bold

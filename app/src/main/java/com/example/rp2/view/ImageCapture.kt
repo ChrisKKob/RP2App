@@ -12,6 +12,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -20,6 +21,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -49,7 +57,7 @@ import java.util.Objects
 fun ImageCaptureScreen(
     navController: NavController,
     appViewModel: AppViewModel
-) {
+)  {
     CaptureImageContainer(navController = navController, appViewModel)
 }
 
@@ -80,8 +88,8 @@ fun CaptureImageContainer(
     )
 
     val textRec = TextRecognizer()
-    val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
-        result -> if(result){
+    val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { result ->
+        if (result) {
             appViewModel.updateUri(uri)
             val textTask: Task<Text> = textRec.getResultText(context, appViewModel.capturedImageUri)
             textTask.addOnSuccessListener { visionText ->
@@ -92,8 +100,8 @@ fun CaptureImageContainer(
                 }
 
             navController.navigate("ResultScreen")
-        }   else {
-                Toast.makeText(context, "Falha ao capturar a imagem", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Falha ao capturar a imagem", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -118,66 +126,51 @@ fun CaptureImageContainer(
         }
     }
 
-//        Box(modifier = Modifier.fillMaxSize()) {
-//            CircularProgressIndicator(
-//                modifier = Modifier.align(Center),
-//                color = MaterialTheme.colorScheme.secondary,
-//            )
-//        }
-    
-        Column(
-            modifier = Modifier.padding(
-                start = 16.dp, end = 16.dp, bottom = 16.dp
-            )
-        ) {
-
-
-            Row(Modifier.padding(top = 24.dp, start = 24.dp, end = 24.dp)) {
-                Image(
-                    painter = painterResource(id = R.drawable.profile),
-                    contentDescription = null,
-                    modifier = Modifier.width(width = 36.dp)
-                )
-
-            }
-            Box(
-                Modifier.padding(top = 24.dp, start = 24.dp, end = 24.dp)
-            ) {
-                Text(
-                    text = "Capturar imagem",
-                    fontSize = 24.sp,
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 80.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.img_6),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .align(alignment = Alignment.Center)
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(alignment = Alignment.CenterHorizontally)
-                    .padding(top = 40.dp, start = 24.dp, end = 24.dp)
-            ) {
-                Text(
-                    text = "Capture uma nova imagem ou selecione da galeria",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-            }
-
             Column {
+                Row(Modifier.padding(top = 24.dp, start = 24.dp, end = 24.dp)) {
+                    Image(
+                        painter = painterResource(id = R.drawable.profile),
+                        contentDescription = null,
+                        modifier = Modifier.width(width = 36.dp)
+                    )
+
+                }
+                Box(
+                    Modifier.padding(top = 24.dp, start = 24.dp, end = 24.dp)
+                ) {
+                    Text(
+                        text = "Capturar imagem",
+                        fontSize = 24.sp,
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 80.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.img_6),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth(0.7f)
+                            .align(alignment = Alignment.Center)
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(alignment = Alignment.CenterHorizontally)
+                        .padding(top = 40.dp, start = 24.dp, end = 24.dp)
+                ) {
+                    Text(
+                        text = "Capture uma nova imagem ou selecione da galeria",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                }
                 Button(
                     onClick = { handleOnCaptureImageClick() },
                     colors = ButtonDefaults.buttonColors(
@@ -227,11 +220,8 @@ fun CaptureImageContainer(
                     )
 
                 }
-            }
 
         }
-
-
 
 }
 
