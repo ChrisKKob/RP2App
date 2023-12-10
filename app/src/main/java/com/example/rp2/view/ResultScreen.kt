@@ -64,7 +64,7 @@ fun ResultScreen(
     navController: NavController,
     appViewModel: AppViewModel
 ){
-    Column(modifier = Modifier
+    Column(modifier = Modifier.background(Color.White)
         .padding(start = 16.dp, end = 16.dp, top = 16.dp)
         .fillMaxSize()
     ){
@@ -78,7 +78,8 @@ fun ResultScreen(
                     .width(30.dp)
                     .height(30.dp)
                     .padding(start = 0.dp, top = 6.dp, end = 7.dp, bottom = 6.dp)
-                    .clickable { },
+                    .clickable {navController.popBackStack()
+                        navController.navigate("ImageCaptureScreen")},
                 painter = painterResource(id = R.drawable.east),
                 contentDescription = null,
                 contentScale = ContentScale.Crop
@@ -103,14 +104,14 @@ fun TabScreen(
     navController: NavController,
     appViewModel: AppViewModel
 ) {
-    var tabIndex by remember { mutableIntStateOf(1) }
+    var tabIndex by remember { mutableIntStateOf(0) }
 
     val tabs = listOf("Imagem", "Texto")
 
     val indicator = @Composable { tabPositions: List<TabPosition> ->
         TabRowDefaults.Indicator(
             modifier = Modifier.tabIndicatorOffset(tabPositions[tabIndex]),
-            color = Color(0xFF4834D4)
+            color = Color(android.graphics.Color.parseColor("#007FFF"))
         )
     }
 
@@ -120,7 +121,6 @@ fun TabScreen(
         ) {
             TabRow(
                 selectedTabIndex = tabIndex,
-                //contentColor = MaterialTheme.colorScheme.,
                 modifier = Modifier.padding(top = 15.dp),
                 indicator = indicator
             ) {
@@ -128,9 +128,10 @@ fun TabScreen(
                     Tab(
                         selected = tabIndex == index,
                         onClick = { tabIndex = index },
+                        modifier = Modifier.background(Color.White),
                         text = { Text(title,
                             style = TextStyle(
-                                color = Color(0xFF4834D4),
+                                color = Color(android.graphics.Color.parseColor("#007FFF")),
                                 fontWeight = FontWeight(500),
                                 fontSize = 25.sp,
                             ))
@@ -171,7 +172,7 @@ fun TabImage(
         Text(
             text = "Manipular contraste",
             style = TextStyle(
-                fontSize = 15.sp,
+                fontSize = 25.sp,
                 fontFamily = FontFamily.Default,
                 fontWeight = FontWeight(400),
 
@@ -189,7 +190,7 @@ fun TabImage(
 
             Button(
                 onClick = { contrast += 0.1f },
-                colors = ButtonDefaults.filledTonalButtonColors( Color(0xFF4834D4)),
+                colors = ButtonDefaults.filledTonalButtonColors(  Color(android.graphics.Color.parseColor("#007FFF"))),
                 modifier = Modifier
                     .padding(start = 10.dp, end = 7.dp)
                     .width(80.dp)
@@ -199,13 +200,14 @@ fun TabImage(
                         fontSize = 30.sp,
                         lineHeight = 20.sp,
                         fontFamily = FontFamily.Default,
-                        color = Color(0xFFFFFFFF))
+                        color = Color.White
+                )
                 )
             }
 
             Button(
                 onClick = { contrast -= 0.1f },
-                colors = ButtonDefaults.filledTonalButtonColors( Color(0xFF4834D4)),
+                colors = ButtonDefaults.filledTonalButtonColors(  Color(android.graphics.Color.parseColor("#007FFF"))),
                 modifier = Modifier.width(80.dp)
             ) {
                 Text("—",
@@ -214,7 +216,8 @@ fun TabImage(
                         lineHeight = 30.sp,
                         fontFamily = FontFamily.Default,
                         fontWeight = FontWeight(300),
-                        color = Color(0xFFFFFFFF))
+                        color = Color.White
+                )
                 )
             }
         }
@@ -233,21 +236,6 @@ fun TabImage(
             )
 
         }
-//        Box( modifier = Modifier
-//            .height(300.dp)
-//            .padding(top = 70.dp)
-//            .clip(shape = RoundedCornerShape(size = 25.dp))
-//            .background(Color(0xFF8E80EE))
-//            .fillMaxWidth()) {
-//            Text(
-//                text = "Além de alterar o contraste, você pode manipular o zoom com movimentos de pinça como usualmente é feito em fotos nos smartphones atuais. Use as configurações de zoom e contraste que preferir!",
-//                style = TextStyle(
-//                    fontSize = 22.sp,
-//                    fontFamily = FontFamily.Default,
-//                    fontWeight = FontWeight(500)
-//                ),modifier = Modifier.padding(10.dp, top = 10.dp, end = 10.dp)
-//            )
-//        }
     }
 
 
@@ -273,9 +261,9 @@ fun TabText(
                     .fillMaxWidth()
                     .padding(8.dp),
                 colors = SliderDefaults.colors(
-                    thumbColor = Color(0xFF4834D4),
-                    activeTrackColor = Color(0xFF4834D4),
-                    inactiveTrackColor =  Color(0xFFD4CDFE),
+                    thumbColor = Color(android.graphics.Color.parseColor("#007FFF")),
+                    activeTrackColor = Color(android.graphics.Color.parseColor("#007FFF")),
+                    inactiveTrackColor =  Color(android.graphics.Color.parseColor("#C4E1FF")),
                 ),
                 onValueChange = { sliderState.value = it }
             )
@@ -305,7 +293,7 @@ fun TabText(
             navController.popBackStack()
             navController.navigate("ImageCaptureScreen")
         } ,
-            colors = ButtonDefaults.filledTonalButtonColors( Color(0xFF4834D4)),
+            colors = ButtonDefaults.filledTonalButtonColors(Color(android.graphics.Color.parseColor("#007FFF"))),
             modifier = Modifier.padding(start = 160.dp, top = 10.dp)
         ) {
             Text(
@@ -314,7 +302,7 @@ fun TabText(
                     fontSize = 20.sp,
                     lineHeight = 20.sp,
                     fontFamily = FontFamily.Default,
-                    color = Color(0xFFFFFFFF)
+                    color = Color.White
                 ),
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
