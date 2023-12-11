@@ -63,7 +63,7 @@ fun HomeScreen(
                 .padding(top = 32.dp, start = 32.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.img_3),
+                painter = painterResource(id = R.drawable.img_8),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
             )
