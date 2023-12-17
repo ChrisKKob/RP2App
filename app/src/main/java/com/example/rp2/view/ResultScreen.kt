@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -123,7 +123,7 @@ fun TabScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(top = 32.dp, start = 24.dp, end = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -311,23 +311,17 @@ fun TabText(
         Spacer(modifier = Modifier.height(16.dp))
 
         Box(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 400.dp)
                 .clip(shape = RoundedCornerShape(size = 16.dp))
                 .background(Color(0xFF2B2B2B))
         ) {
             Text(
                 text = appViewModel.texto,
                 style = TextStyle(color = Color.White),
-                fontSize = (sliderState.value + 1) * 24.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .padding(8.dp)
+                fontSize = (sliderState.value + 1) * 24.sp
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-
 
 
     }

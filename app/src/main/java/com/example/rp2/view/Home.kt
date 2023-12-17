@@ -45,11 +45,11 @@ fun HomeScreen(
 
         Row(Modifier.padding(top = 24.dp, start = 24.dp, end = 24.dp)) {
             Text(
-                text = "Bem vindo ",
+                text = "Bem vindo, ",
                 fontSize = 24.sp,
             )
             Text(
-                text = "Nicolas",
+                text = "User",
                 fontSize = 24.sp,
                 color = Color(android.graphics.Color.parseColor("#007FFF")),
                 fontWeight = FontWeight.Bold
